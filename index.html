@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Wedding Invitation | Anu &amp; Prince — 30 November 2026</title>
+  <meta name="description"
+    content="A continuous 3D scroll-controlled wedding invitation celebrating Anu &amp; Prince on 30 November 2026. Featuring authentic original family photographs.">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💍</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+
+<body class="wedding-experience">
+
+  <!-- Fixed Fullscreen Three.js WebGL Layer (Transparent, pointer-events:none) -->
+  <div id="webgl-canvas-container" aria-hidden="true"></div>
+
+  <!-- Global Sticky Navigation Header (Light Theme) -->
+  <header class="site-header">
+    <div class="header-main-row">
+      <a href="#sec-intro" class="brand-monogram">
+        <span class="brand-title">Anu &amp; Prince</span>
+        <span class="brand-date">30 November 2026</span>
+      </a>
+
+      <!-- Header Controls: Motion Gyro & Ambient Audio -->
+      <div class="header-controls">
+        <button id="motion-toggle-btn" class="control-pill-btn" aria-label="Toggle phone tilt 3D motion">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+          </svg>
+          <span id="motion-btn-label">Tilt 3D</span>
+        </button>
+
+        <button id="audio-toggle-btn" class="control-pill-btn" aria-label="Toggle ambient atmospheric music">
+          <span class="audio-waves">
+            <span class="audio-wave-bar"></span>
+            <span class="audio-wave-bar"></span>
+            <span class="audio-wave-bar"></span>
+          </span>
+          <span id="audio-btn-label">Music</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Compact Touch-Scrollable Navigation Pills -->
+    <nav class="nav-pills" aria-label="Wedding sections">
+      <a href="#sec-intro" class="nav-link current">Intro</a>
+      <a href="#sec-bride" class="nav-link">The Bride</a>
+      <a href="#sec-couple" class="nav-link">The Couple</a>
+      <a href="#sec-itinerary" class="nav-link">Itinerary</a>
+      <a href="#sec-family" class="nav-link">Family Legacy</a>
+      <a href="#sec-venue" class="nav-link">Venue</a>
+      <a href="#sec-rsvp" class="nav-link">RSVP</a>
+    </nav>
+  </header>
+
+  <!-- Continuous Vertically Scrollable Content Flow -->
+  <main class="main-content-flow">
+
+    <!-- 1. INTRO / THE INVITATION OPENING -->
+    <section id="sec-intro" class="hero-stage">
+      <div class="hero-editorial-card">
+        <div class="badge-pill">A Sacred Celebration of Love</div>
+        <p class="hero-invitation-sub">Together with their loving families, joyfully invite you to</p>
+        <h1 class="hero-title hero-family-title">Kolinda Family</h1>
+        <p class="hero-wedding-sub">The Wedding of Anu <span class="ampersand">&amp;</span> Prince</p>
+
+        <div class="hero-date-banner">
+          <span class="date-text">30 November 2026</span>
+          <span class="date-sep">✦</span>
+          <span class="date-text">Auspicious Vows</span>
+        </div>
+
+        <p class="hero-description">
+          Step into our continuous 3D world as we celebrate our journey of love, heritage, and the blessings of our
+          elders.
+        </p>
+
+        <!-- Your Invitation Card Teaser -->
+        <div class="invite-card-teaser">
+          <div class="invite-card-thumb-wrap">
+            <img src="/images/invitation/card-cover.jpg" alt="Wedding invitation card preview" class="invite-card-thumb" width="120" height="160" loading="lazy" />
+          </div>
+          <div class="invite-card-content">
+            <span class="invite-card-eyebrow">Your Invitation</span>
+            <h3 class="invite-card-heading">Your invitation card is ready</h3>
+            <p class="invite-card-text">Open the PDF to view the card.</p>
+            <button type="button" id="open-invite-pdf" class="btn-teaser-pdf" aria-haspopup="dialog">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span>Open Invitation Card</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-actions-group">
+          <a href="#sec-bride" class="btn-primary-gold">
+            <span>Begin 3D Experience</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <polyline points="19 12 12 19 5 12"></polyline>
+            </svg>
+          </a>
+          <a href="#sec-family" class="btn-secondary-ghost">View Family Gallery</a>
+        </div>
+
+        <div class="hero-scroll-cue">
+          <div class="scroll-mouse-icon">
+            <div class="scroll-wheel"></div>
+          </div>
+          <span>Scroll down to explore</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. CHAPTER I: THE BRIDE — HER STORY -->
+    <section id="sec-bride" class="gallery-chapter-section" data-chapter="bride">
+      <div class="chapter-intro-banner">
+        <span class="chapter-eyebrow">Chapter I</span>
+        <h2 class="chapter-title">The Bride — Her Story</h2>
+        <p class="chapter-sub">Poise, grace, and generations of cherished family blessings stepping into eternal love.
+        </p>
+      </div>
+
+      <div class="photo-rows-container">
+        <!-- Bride Photo 1 (Full-Width B&W) -->
+        <article class="photo-row photo-row--fullwidth" data-photo-id="bride-01">
+          <figure class="photo-placeholder photo-placeholder--fullwidth" style="--aspect-ratio: 0.818;"
+            data-photo-id="bride-01" aria-label="Anu — The Golden Hour"></figure>
+          <div class="photo-caption photo-caption--centered">
+            <span class="caption-tag">The Bride</span>
+            <h3 class="caption-title">Anu</h3>
+            <p class="caption-desc">Stepping into this golden dawn with quiet grace, cherished roots, and eyes full of
+              forever.</p>
+            <div class="caption-actions">
+              <button class="btn-inspect-3d" data-photo-id="bride-01">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Original High-Res</span>
+              </button>
+              <span class="fidelity-pill">Unaltered Original</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Bride Photo 2 (Full-Width B&W) -->
+        <article class="photo-row photo-row--fullwidth" data-photo-id="bride-02">
+          <figure class="photo-placeholder photo-placeholder--fullwidth" style="--aspect-ratio: 0.953;"
+            data-photo-id="bride-02" aria-label="Elegance &amp; Heritage"></figure>
+          <div class="photo-caption photo-caption--centered">
+            <span class="caption-tag">The Bride</span>
+            <h3 class="caption-title">Anu</h3>
+            <p class="caption-desc">Carrying ancestral blessings forward, standing poised and radiant on the threshold
+              of our new beginning.</p>
+            <div class="caption-actions">
+              <button class="btn-inspect-3d" data-photo-id="bride-02">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Original High-Res</span>
+              </button>
+              <span class="fidelity-pill">Unaltered Original</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Bride Photo 3 -->
+        <article class="photo-row" data-photo-id="bride-03">
+          <figure class="photo-placeholder" style="--aspect-ratio: 0.915;" data-photo-id="bride-03"
+            aria-label="Adorned in Crimson &amp; Gold"></figure>
+          <div class="photo-caption">
+            <span class="caption-tag">The Bride</span>
+            <h3 class="caption-title">Anu</h3>
+            <p class="caption-desc">Surrounded by festive joy and woven gold, glowing with gratitude for all the love
+              that brought us here.</p>
+            <div class="caption-actions">
+              <button class="btn-inspect-3d" data-photo-id="bride-03">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Original High-Res</span>
+              </button>
+              <span class="fidelity-pill">Unaltered Original</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 3. CHAPTER II: THE COUPLE — TOGETHER -->
+    <section id="sec-couple" class="gallery-chapter-section" data-chapter="couple">
+      <div class="chapter-intro-banner">
+        <span class="chapter-eyebrow">Chapter II</span>
+        <h2 class="chapter-title">The Couple — Together</h2>
+        <p class="chapter-sub">Two souls entwined by eternal Vedic vows, mutual devotion, and shared dreams.</p>
+      </div>
+
+      <div class="photo-rows-container">
+        <!-- Couple Photo 1 -->
+        <article class="photo-row" data-photo-id="couple-01">
+          <figure class="photo-placeholder" style="--aspect-ratio: 1.526;" data-photo-id="couple-01"
+            aria-label="Sacred Bond of Hastamelap"></figure>
+          <div class="photo-caption">
+            <span class="caption-tag">The Couple</span>
+            <h3 class="caption-title">Anu &amp; Prince</h3>
+            <p class="caption-desc">Two hands entwined in sacred faith, uniting two souls and families under eternal
+              Vedic vows.</p>
+            <div class="caption-actions">
+              <button class="btn-inspect-3d" data-photo-id="couple-01">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Original High-Res</span>
+              </button>
+              <span class="fidelity-pill">Unaltered Original</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Couple Photo 2 -->
+        <article class="photo-row" data-photo-id="couple-02">
+          <figure class="photo-placeholder" style="--aspect-ratio: 1.103;" data-photo-id="couple-02"
+            aria-label="Walking Into Forever"></figure>
+          <div class="photo-caption">
+            <span class="caption-tag">The Couple</span>
+            <h3 class="caption-title">Anu &amp; Prince</h3>
+            <p class="caption-desc">Taking our first auspicious steps side by side, eager to build a life filled with
+              laughter, kindness, and devotion.</p>
+            <div class="caption-actions">
+              <button class="btn-inspect-3d" data-photo-id="couple-02">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Original High-Res</span>
+              </button>
+              <span class="fidelity-pill">Unaltered Original</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Couple Photo 3 -->
+        <article class="photo-row" data-photo-id="couple-03">
+          <figure class="photo-placeholder" style="--aspect-ratio: 0.904;" data-photo-id="couple-03"
+            aria-label="Shared Smiles &amp; Tenderness"></figure>
+          <div class="photo-caption">
+            <span class="caption-tag">The Couple</span>
+            <h3 class="caption-title">Anu &amp; Prince</h3>
+            <p class="caption-desc">In every quiet glance and shared joke, discovering our favorite companion for all of
+              life's tomorrows.</p>
+            <div class="caption-actions">
+              <button class="btn-inspect-3d" data-photo-id="couple-03">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Original High-Res</span>
+              </button>
+              <span class="fidelity-pill">Unaltered Original</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 4. ITINERARY & CEREMONIES -->
+    <section id="sec-itinerary" class="bridge-section itinerary-section">
+      <div class="bridge-container">
+        <div class="section-header-centered">
+          <span class="section-eyebrow">Sacred Traditions</span>
+          <h2 class="section-heading">Itinerary &amp; Ceremonies</h2>
+          <p class="section-subtext">Join us across every ritual filled with Vedic songs, vibrant colors, and joyous
+            banquets.</p>
+        </div>
+
+        <div class="events-timeline-grid">
+          <!-- Event 1: Pile Chawal -->
+          <div class="event-glass-tile">
+            <div class="event-date-badge">Friday, 20 November 2026</div>
+            <h3 class="event-name">Pile Chawal</h3>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>9:15 AM</span>
+            </div>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>In-house</span>
+            </div>
+          </div>
+
+          <!-- Event 2: Ganesh Sthapana (Baan) -->
+          <div class="event-glass-tile">
+            <div class="event-date-badge">Saturday, 28 November 2026</div>
+            <h3 class="event-name">Ganesh Sthapana (Baan)</h3>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>9:15 AM</span>
+            </div>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>In-house</span>
+            </div>
+          </div>
+
+          <!-- Event 3: Chaak -->
+          <div class="event-glass-tile">
+            <div class="event-date-badge">Sunday, 29 November 2026</div>
+            <h3 class="event-name">Chaak</h3>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>10:15 AM</span>
+            </div>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>In-house</span>
+            </div>
+          </div>
+
+          <!-- Event 4: Bhaat -->
+          <div class="event-glass-tile">
+            <div class="event-date-badge">Sunday, 29 November 2026</div>
+            <h3 class="event-name">Bhaat</h3>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>5:30 PM</span>
+            </div>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>Chhagan Bhani Wadi</span>
+            </div>
+          </div>
+
+          <!-- Event 5: Haldi & Sangeet -->
+          <div class="event-glass-tile">
+            <div class="event-date-badge">Sunday, 29 November 2026</div>
+            <h3 class="event-name">Haldi &amp; Sangeet</h3>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Haldi: 12:15 PM</span>
+            </div>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Sangeet: 1:15 PM</span>
+            </div>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>Chhagan Bhani Wadi</span>
+            </div>
+          </div>
+
+          <!-- Event 6: Priti Bhojan -->
+          <div class="event-glass-tile">
+            <div class="event-date-badge">Monday, 30 November 2026</div>
+            <h3 class="event-name">Priti Bhojan</h3>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>7:15 AM</span>
+            </div>
+            <div class="event-detail-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>Vastral Party Plot</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. CHAPTER III: FAMILY LEGACY & MEMORIES (ALL 6 FAMILY PHOTOS) -->
+    <section id="sec-family" class="gallery-chapter-section" data-chapter="family">
+      <div class="chapter-intro-banner">
+        <span class="chapter-eyebrow">Chapter III</span>
+        <h2 class="chapter-title">Family Legacy &amp; Memories</h2>
+        <p class="chapter-sub">Generations of unconditional love, blessings, and lifelong togetherness.</p>
+      </div>
+
+      <div class="family-grid-container">
+        <!-- Family Photo 1 -->
+        <article class="family-card" data-photo-id="family-01">
+          <figure class="photo-placeholder" style="--aspect-ratio: 1.157;" data-photo-id="family-01"
+            aria-label="The Elders' Blessings"></figure>
+          <div class="photo-caption">
+            <span class="caption-tag">Anu's Mother</span>
+            <h3 class="caption-title">Mother</h3>
+            <p class="caption-desc">Her selfless love and quiet prayers are the foundation upon which my entire world is
+              built.</p>
+            <div class="caption-actions">
+              <button class="btn-inspect-3d" data-photo-id="family-01">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Original High-Res</span>
+              </button>
+              <span class="fidelity-pill">Unaltered Original</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Family Photo 2 -->
+        <article class="family-card" data-photo-id="family-02">
+          <figure class="photo-placeholder" style="--aspect-ratio: 1.139;" data-photo-id="family-02"
+            aria-label="Bade Papa"></figure>
+          <div class="photo-caption">
+            <span class="caption-tag">Anu's Father's Elder Brother</span>
+            <h3 class="caption-title">Bade Papa</h3>
+            <p class="caption-desc">His warm embrace and proud laughter have sheltered me since childhood, and today his
+              blessings mean the world to me.</p>
+            <div class="caption-actions">
+              <button class="btn-inspect-3d" data-photo-id="family-02">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Original High-Res</span>
+              </button>
+              <span class="fidelity-pill">Unaltered Original</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Family Photo 3 -->
+        <article class="family-card" data-photo-id="family-03">
+          <figure class="photo-placeholder" style="--aspect-ratio: 0.912;" data-photo-id="family-03"
+            aria-label="Bhaisaab"></figure>
+          <div class="photo-caption">
+            <span class="caption-tag">Anu's Elder Brother</span>
+            <h3 class="caption-title">Bhaisaab</h3>
+            <p class="caption-desc">My protector, my guide, and my first friend, standing tall beside me as I begin a
+              new chapter.</p>
+            <div class="caption-actions">
+              <button class="btn-inspect-3d" data-photo-id="family-03">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Original High-Res</span>
+              </button>
+              <span class="fidelity-pill">Unaltered Original</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Family Photo 4 -->
+        <article class="family-card" data-photo-id="family-04">
+          <figure class="photo-placeholder" style="--aspect-ratio: 1.015;" data-photo-id="family-04"
+            aria-label="Badi Mummy"></figure>
+          <div class="photo-caption">
+            <span class="caption-tag">Anu's Aunt, Like a Second Mother</span>
+            <h3 class="caption-title">Badi Mummy</h3>
+            <p class="caption-desc">Her gentle care, patient love, and countless blessings have shaped who I am, a
+              second mother in every way.</p>
+            <div class="caption-actions">
+              <button class="btn-inspect-3d" data-photo-id="family-04">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Original High-Res</span>
+              </button>
+              <span class="fidelity-pill">Unaltered Original</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Family Photo 5 -->
+        <article class="family-card" data-photo-id="family-05">
+          <figure class="photo-placeholder" style="--aspect-ratio: 1.166;" data-photo-id="family-05"
+            aria-label="Mumma &amp; Papa"></figure>
+          <div class="photo-caption">
+            <span class="caption-tag">Anu's Parents</span>
+            <h3 class="caption-title">Mumma &amp; Papa</h3>
+            <p class="caption-desc">Everything I am began with your sacrifices and your love. Thank you for being my
+              strength, today and always.</p>
+            <div class="caption-actions">
+              <button class="btn-inspect-3d" data-photo-id="family-05">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>Inspect Original High-Res</span>
+              </button>
+              <span class="fidelity-pill">Unaltered Original</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 6. VENUE & COUNTDOWN SECTION -->
+    <section id="sec-venue" class="bridge-section venue-section">
+      <div class="bridge-container">
+        <div class="venue-details-container">
+          <div class="venue-card-glass">
+            <div>
+              <span class="section-eyebrow">Location &amp; Destination</span>
+              <h2 class="venue-title">Vastral Open Party Plot</h2>
+              <p class="venue-address">
+                Vastral Open Party Plot<br>
+                Opp. Girivar Palms, Vastral, Ahmedabad
+              </p>
+            </div>
+            <div class="venue-actions">
+              <a href="https://www.google.com/maps/search/?api=1&amp;query=Vastral%20Open%20Party%20Plot%2C%20Opp.%20Girivar%20Palms%2C%20Vastral%2C%20Ahmedabad" target="_blank" rel="noopener noreferrer" class="btn-outline-gold">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span>Google Maps</span>
+              </a>
+              <button id="btn-google-cal" class="btn-outline-gold">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>Google Cal</span>
+              </button>
+              <button id="btn-ics-cal" class="btn-outline-gold">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Save .ICS</span>
+              </button>
+              <button id="btn-share-invite" class="btn-outline-gold">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="18" cy="5" r="3"></circle>
+                  <circle cx="6" cy="12" r="3"></circle>
+                  <circle cx="18" cy="19" r="3"></circle>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+                <span>Share</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Countdown Card -->
+          <div class="countdown-container">
+            <h3 class="countdown-heading">Until We Say “I Do”</h3>
+            <span class="countdown-sub">30 November 2026</span>
+            <div class="countdown-grid">
+              <div class="countdown-digit-tile">
+                <span id="cd-days" class="countdown-num">00</span>
+                <span class="countdown-label">Days</span>
+              </div>
+              <div class="countdown-digit-tile">
+                <span id="cd-hours" class="countdown-num">00</span>
+                <span class="countdown-label">Hours</span>
+              </div>
+              <div class="countdown-digit-tile">
+                <span id="cd-minutes" class="countdown-num">00</span>
+                <span class="countdown-label">Minutes</span>
+              </div>
+              <div class="countdown-digit-tile">
+                <span id="cd-seconds" class="countdown-num">00</span>
+                <span class="countdown-label">Seconds</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. RSVP, BLESSINGS WALL & HARSH RAJPUT SIGNATURE -->
+    <section id="sec-rsvp" class="bridge-section rsvp-section">
+      <div class="bridge-container">
+        <div class="rsvp-wrapper">
+          <!-- RSVP Form Card -->
+          <div class="rsvp-card-main">
+            <span class="section-eyebrow">Warmest Presence</span>
+            <h3 class="story-title">Confirm Your Presence</h3>
+            <form id="rsvp-form">
+              <!-- Honeypot anti-spam field: hidden from real users, robots will fill it -->
+              <div class="honeypot-field" style="position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;" aria-hidden="true">
+                <label for="rsvp-website">Website</label>
+                <input type="text" name="website" id="rsvp-website" tabindex="-1" autocomplete="off">
+              </div>
+
+              <div class="form-group">
+                <label for="rsvp-name">Your Full Name</label>
+                <input type="text" id="rsvp-name" class="input-styled" placeholder="e.g. Aditi Sharma &amp; Family"
+                  required>
+              </div>
+
+              <div class="form-group">
+                <label>Will You Join Us?</label>
+                <div class="radio-group-attendance">
+                  <label class="radio-label-chip">
+                    <input type="radio" name="attendance" value="Attending" checked>
+                    <span>Joyfully Accept</span>
+                  </label>
+                  <label class="radio-label-chip">
+                    <input type="radio" name="attendance" value="Decline">
+                    <span>Sending Blessings</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="rsvp-guests">Number of Guests</label>
+                <select id="rsvp-guests" class="select-styled">
+                  <option value="1">1 Honored Guest</option>
+                  <option value="2" selected>2 Guests</option>
+                  <option value="3">3 Guests</option>
+                  <option value="4">4 Guests</option>
+                  <option value="5+">5+ Guests (Family)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="rsvp-message">A Blessing or Note for Anu &amp; Prince</label>
+                <textarea id="rsvp-message" class="textarea-styled" rows="3"
+                  placeholder="Write your heartfelt blessing or warm wishes..."></textarea>
+              </div>
+
+              <button type="submit" class="btn-submit-rsvp">Send RSVP &amp; Blessings</button>
+            </form>
+            <div id="rsvp-status"></div>
+          </div>
+
+          <!-- Blessings Stream Wall -->
+          <div class="blessings-wall-card">
+            <span class="section-eyebrow">Messages of Love</span>
+            <h3 class="story-title">Family Blessings Wall</h3>
+            <div id="blessings-stream" class="blessings-stream"></div>
+          </div>
+        </div>
+
+        <!-- Closing Finale & Attribution -->
+        <div class="closing-finale-container">
+          <p class="closing-vows">
+            “In your hands, I have found my forever home.<br>
+            With your blessings, our journey begins.”
+          </p>
+          <div class="closing-names">Anu <span class="ampersand">&amp;</span> Prince</div>
+          <div class="closing-families">Together with our loved ones • 30 November 2026</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Developer Credit Section -->
+    <section id="sec-developer" class="developer-credit-section">
+      <div class="developer-credit-container">
+        <div class="developer-photo-frame">
+          <picture>
+            <source srcset="./images/developer/harsh.webp" type="image/webp">
+            <img src="./images/developer/harsh.jpg" alt="Harsh Rajput, developer of this website" class="developer-photo"
+              loading="eager" decoding="async" fetchpriority="high"
+              onerror="if (!this.dataset.tried) { this.dataset.tried = '1'; this.src = '/images/developer/harsh.jpg'; }">
+          </picture>
+        </div>
+        <div class="developer-credit-text">
+          <span class="developer-credit-label">Developed by</span>
+          <span class="developer-credit-name">Harsh Rajput</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Flower Finale: Rolling Interactive Flower Meadow (Bottom of Page) -->
+    <section id="sec-flower-finale">
+      <div class="flower-finale-overlay">
+        <span class="section-eyebrow">Forever Blossoming</span>
+        <h2 class="flower-finale-heading">With Love &amp; Gratitude</h2>
+        <p class="flower-finale-sub">Anu &amp; Prince • 30 November 2026</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Floating Progress Bar -->
+  <footer class="site-footer-bar">
+    <div class="scroll-indicator">
+      <div class="scroll-line-container">
+        <div id="scroll-progress-fill"></div>
+      </div>
+      <span id="scroll-percent">0%</span>
+    </div>
+    <div class="interactive-hint">
+      <span class="hint-dot"></span>
+      <span>3D Spatial Gallery</span>
+    </div>
+  </footer>
+
+  <!-- High-Res Original Photo Inspector Modal -->
+  <div id="photo-modal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-dialog">
+      <button id="photo-modal-close" class="modal-close-btn" aria-label="Close modal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="modal-body">
+        <div class="modal-img-container">
+          <img id="photo-modal-img" src="" alt="High resolution photograph">
+        </div>
+        <div class="modal-info-panel">
+          <span id="photo-modal-tag" class="modal-tag">Original Photo</span>
+          <h3 id="photo-modal-title" class="modal-title"></h3>
+          <p id="photo-modal-desc" class="modal-desc"></p>
+          <div class="modal-badge-unaltered">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b8975a" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span>Original pixels preserved without AI retouching</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wedding Invitation PDF Modal Viewer -->
+  <div id="invite-pdf-modal" class="modal-overlay invite-pdf-overlay" role="dialog" aria-modal="true" aria-labelledby="invite-pdf-title" aria-hidden="true">
+    <div class="modal-dialog invite-pdf-dialog">
+      <header class="invite-pdf-header">
+        <div class="invite-pdf-title-group">
+          <span class="invite-pdf-eyebrow">Kolinda Family</span>
+          <h3 id="invite-pdf-title" class="invite-pdf-title">Wedding Invitation Card</h3>
+        </div>
+        <button id="invite-pdf-close" class="modal-close-btn" aria-label="Close invitation card modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </header>
+      <div class="invite-pdf-viewer">
+        <iframe id="invite-pdf-iframe" title="Wedding Invitation Card PDF" src=""></iframe>
+      </div>
+      <footer class="invite-pdf-footer">
+        <a id="invite-pdf-open-tab" href="/docs/Anita_Kanwar_Wedding.pdf" target="_blank" rel="noopener noreferrer" class="btn-modal-action btn-modal-ghost">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          <span>Open in New Tab</span>
+        </a>
+        <a id="invite-pdf-download" href="/docs/Anita_Kanwar_Wedding.pdf" download="Anita_Kanwar_Wedding.pdf" class="btn-modal-action btn-modal-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download PDF</span>
+        </a>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Toast Notification Feedback -->
+  <div id="toast-notification" class="toast-notice"></div>
+
+
+  <!-- Application Entry Point -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
