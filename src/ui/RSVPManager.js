@@ -14,6 +14,35 @@ function escapeHTML(str) {
 }
 
 /**
+ * Generates a unique submission ID matching /^[A-Za-z0-9_-]{8,64}$/.
+ * Uses crypto.randomUUID() where available, with cryptographic or pseudorandom fallbacks.
+ */
+function generateSubmissionId() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40; // UUID version 4
+    bytes[8] = (bytes[8] & 0x3f) | 0x80; // UUID variant
+    const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+  }
+  return 'rsvp_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 12);
+}
+
+/**
+ * Calculates exponential backoff delay with random jitter, clamped between 1000ms and 4000ms.
+ */
+function calculateBackoffDelay(attemptIndex) {
+  const base = 1000 * Math.pow(1.5, attemptIndex);
+  const jitter = Math.random() * 1000;
+  const delay = Math.round(base + jitter);
+  return Math.min(4000, Math.max(1000, delay));
+}
+
+/**
  * RSVP and Live Countdown Manager
  * Handles guest blessings, local persistence, confetti burst, and live countdown timer.
  */
@@ -26,6 +55,7 @@ export class RSVPManager {
     this.form = document.getElementById('rsvp-form');
     this.statusContainer = document.getElementById('rsvp-status');
     this.blessingsList = document.getElementById('blessings-stream');
+    this.isSubmitting = false;
 
     this.initCountdown();
     this.initRSVPForm();
@@ -68,22 +98,45 @@ export class RSVPManager {
     this.form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      // In-memory guard to prevent concurrent submission processing
+      if (this.isSubmitting) {
+        return;
+      }
+
       // 1. Anti-spam honeypot check: reject if filled
       const honeypot = document.getElementById('rsvp-website')?.value || '';
       if (honeypot.trim() !== '') {
         return; // Silently drop bot submissions
       }
 
-      // 2. Client-side rate limit: 30s cooldown between submissions from the same browser
-      const RATE_LIMIT_SECONDS = 30;
-      const lastSubmit = parseInt(localStorage.getItem('wedding_rsvp_last_submit') || '0', 10);
+      // 2. Client-side rate limits & cooldowns
       const now = Date.now();
-      if (now - lastSubmit < RATE_LIMIT_SECONDS * 1000) {
-        const remaining = Math.ceil((RATE_LIMIT_SECONDS * 1000 - (now - lastSubmit)) / 1000);
+
+      // 2a. Success cooldown: 30s after a successful submission
+      const SUCCESS_COOLDOWN_SECONDS = 30;
+      const lastSubmit = parseInt(localStorage.getItem('wedding_rsvp_last_submit') || '0', 10);
+      if (now - lastSubmit < SUCCESS_COOLDOWN_SECONDS * 1000) {
+        const remaining = Math.ceil((SUCCESS_COOLDOWN_SECONDS * 1000 - (now - lastSubmit)) / 1000);
         if (this.statusContainer) {
           this.statusContainer.innerHTML = `
             <div class="rsvp-error-card">
               <p>Please wait <strong>${remaining} seconds</strong> before submitting another RSVP.</p>
+            </div>
+          `;
+          this.statusContainer.classList.add('visible');
+        }
+        return;
+      }
+
+      // 2b. Final failure cooldown: 5s after exhausted retries
+      const FAILURE_COOLDOWN_SECONDS = 5;
+      const lastFailure = parseInt(localStorage.getItem('wedding_rsvp_last_failure') || '0', 10);
+      if (now - lastFailure < FAILURE_COOLDOWN_SECONDS * 1000) {
+        const remaining = Math.ceil((FAILURE_COOLDOWN_SECONDS * 1000 - (now - lastFailure)) / 1000);
+        if (this.statusContainer) {
+          this.statusContainer.innerHTML = `
+            <div class="rsvp-error-card">
+              <p>Please wait <strong>${remaining} seconds</strong> before trying again.</p>
             </div>
           `;
           this.statusContainer.classList.add('visible');
@@ -102,6 +155,7 @@ export class RSVPManager {
       const submitBtn = this.form.querySelector('.btn-submit-rsvp') || this.form.querySelector('button[type="submit"]');
       const originalBtnText = submitBtn ? submitBtn.textContent : 'Send RSVP & Blessings';
 
+      this.isSubmitting = true;
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Sending...';
@@ -117,34 +171,158 @@ export class RSVPManager {
 
       try {
         if (!endpoint || endpoint.includes('YOUR_APPS_SCRIPT_DEPLOYMENT_ID')) {
-          throw new Error('RSVP endpoint is not configured. Please set VITE_RSVP_ENDPOINT in your environment.');
+          console.error('RSVP endpoint is not configured. Please set VITE_RSVP_ENDPOINT in your environment.');
+          throw {
+            type: 'NOT_CONFIGURED',
+            userMessage: "We couldn't send your RSVP just now. Please try again later. Your details are still filled in."
+          };
         }
 
-        // POST with text/plain to avoid CORS preflight OPTIONS that Apps Script cannot answer
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8'
-          },
-          body: JSON.stringify({
-            name,
-            attendance,
-            guests,
-            message,
-            website: honeypot
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`Server returned status ${response.status}`);
+        // Idempotency: obtain or generate submissionId, persisted in sessionStorage
+        const PENDING_ID_KEY = 'wedding_rsvp_pending_id';
+        let submissionId = sessionStorage.getItem(PENDING_ID_KEY);
+        if (!submissionId) {
+          submissionId = generateSubmissionId();
+          sessionStorage.setItem(PENDING_ID_KEY, submissionId);
         }
 
-        const result = await response.json();
-        if (!result || !result.ok) {
-          throw new Error(result?.error || 'Unable to record your RSVP');
+        // Retry & Timeout Configuration
+        const MAX_RETRIES = 3; // 4 attempts total (initial attempt 0 + up to 3 retries)
+        const PER_ATTEMPT_TIMEOUT_MS = 35000; // 35 seconds per attempt
+        const TOTAL_TIME_BUDGET_MS = 120000; // 120 seconds maximum total duration
+        const startTime = Date.now();
+
+        let successResult = null;
+        let lastFailureReason = null;
+
+        for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+          if (attempt > 0 && (Date.now() - startTime) >= TOTAL_TIME_BUDGET_MS) {
+            lastFailureReason = {
+              type: 'TIMEOUT',
+              userMessage: "We couldn't send your RSVP just now. Please check your connection and try again in a moment. Your details are still filled in."
+            };
+            break;
+          }
+
+          if (attempt > 0 && this.statusContainer) {
+            this.statusContainer.innerHTML = `
+              <div class="rsvp-error-card">
+                <p>Your RSVP is still being submitted. Please wait...</p>
+              </div>
+            `;
+            this.statusContainer.classList.add('visible');
+          }
+
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), PER_ATTEMPT_TIMEOUT_MS);
+
+          let isRetryable = false;
+          let failureInfo = null;
+
+          try {
+            const response = await fetch(endpoint, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'text/plain;charset=utf-8'
+              },
+              body: JSON.stringify({
+                name,
+                attendance,
+                guests,
+                message,
+                website: honeypot,
+                submissionId
+              }),
+              signal: controller.signal
+            });
+
+            if (!response.ok) {
+              failureInfo = {
+                type: 'HTTP_ERROR',
+                status: response.status,
+                userMessage: "We couldn't send your RSVP just now. Please check your connection and try again in a moment. Your details are still filled in."
+              };
+              isRetryable = true;
+            } else {
+              let result;
+              try {
+                result = await response.json();
+              } catch (parseErr) {
+                failureInfo = {
+                  type: 'PARSE_ERROR',
+                  userMessage: "We couldn't send your RSVP just now. Please check your connection and try again in a moment. Your details are still filled in."
+                };
+                isRetryable = true;
+              }
+
+              if (result) {
+                if (result.ok) {
+                  successResult = result;
+                  break;
+                } else {
+                  const retryable = result.retryable !== undefined
+                    ? Boolean(result.retryable)
+                    : Boolean(result.error && typeof result.error === 'string' && /busy/i.test(result.error));
+
+                  if (retryable) {
+                    failureInfo = {
+                      type: 'SERVER_RETRYABLE',
+                      code: result.code,
+                      userMessage: "We couldn't send your RSVP just now. Please check your connection and try again in a moment. Your details are still filled in."
+                    };
+                    isRetryable = true;
+                  } else {
+                    const guestMessage = result.message || result.error || 'Please check your inputs and try again.';
+                    failureInfo = {
+                      type: 'VALIDATION',
+                      code: result.code || 'VALIDATION',
+                      userMessage: guestMessage
+                    };
+                    isRetryable = false;
+                  }
+                }
+              }
+            }
+          } catch (fetchErr) {
+            const isTimeout = fetchErr && fetchErr.name === 'AbortError';
+            failureInfo = {
+              type: isTimeout ? 'TIMEOUT' : 'NETWORK_ERROR',
+              originalError: fetchErr,
+              userMessage: "We couldn't send your RSVP just now. Please check your connection and try again in a moment. Your details are still filled in."
+            };
+            isRetryable = true;
+          } finally {
+            clearTimeout(timeoutId);
+          }
+
+          lastFailureReason = failureInfo;
+
+          // Non-retryable: break out immediately and clear pending submission ID
+          if (!isRetryable) {
+            sessionStorage.removeItem(PENDING_ID_KEY);
+            break;
+          }
+
+          // Delay before next retry if budget permits
+          if (attempt < MAX_RETRIES) {
+            const remainingBudget = TOTAL_TIME_BUDGET_MS - (Date.now() - startTime);
+            if (remainingBudget <= 1000) {
+              break;
+            }
+            const delay = Math.min(calculateBackoffDelay(attempt), remainingBudget);
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
         }
 
-        // Success: update rate limit timestamp
+        if (!successResult || !successResult.ok) {
+          throw lastFailureReason || {
+            type: 'UNKNOWN',
+            userMessage: "We couldn't send your RSVP just now. Please check your connection and try again in a moment. Your details are still filled in."
+          };
+        }
+
+        // Success: clear pending submission ID and update success rate limit timestamp
+        sessionStorage.removeItem(PENDING_ID_KEY);
         localStorage.setItem('wedding_rsvp_last_submit', Date.now().toString());
 
         const blessing = {
@@ -155,15 +333,12 @@ export class RSVPManager {
           timestamp: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
         };
 
-        // Store in LocalStorage so the Blessings Wall still shows the guest's own blessing
         const saved = JSON.parse(localStorage.getItem('wedding_blessings') || '[]');
         saved.unshift(blessing);
         localStorage.setItem('wedding_blessings', JSON.stringify(saved));
 
-        // Trigger Confetti Celebration (Gold, Blush, Champagne)
         this.fireConfetti();
 
-        // Show Confirmation with XSS sanitization
         if (this.statusContainer) {
           const safeName = escapeHTML(name);
           this.statusContainer.innerHTML = `
@@ -179,17 +354,29 @@ export class RSVPManager {
         this.form.reset();
         this.renderStoredBlessings();
       } catch (err) {
-        // Failure: keep form content, do not fire confetti, show friendly retry error
+        // Log technical failure details for developers (without personal data)
+        console.error('RSVP submission failure:', err);
+
+        // Apply 5-second failure cooldown for transient/retryable failures (retries exhausted)
+        if (err && err.type !== 'VALIDATION' && err.type !== 'NOT_CONFIGURED') {
+          localStorage.setItem('wedding_rsvp_last_failure', Date.now().toString());
+        }
+
+        // Render clean, guest-safe message using existing card styling
         if (this.statusContainer) {
-          const safeError = escapeHTML(err.message || 'Please check your internet connection.');
+          const safeMsg = escapeHTML(err && err.userMessage
+            ? err.userMessage
+            : "We couldn't send your RSVP just now. Please check your connection and try again in a moment. Your details are still filled in.");
+
           this.statusContainer.innerHTML = `
             <div class="rsvp-error-card">
-              <p><strong>Could not send RSVP:</strong> ${safeError}. Please try again. Your entered text has been preserved.</p>
+              <p>${safeMsg}</p>
             </div>
           `;
           this.statusContainer.classList.add('visible');
         }
       } finally {
+        this.isSubmitting = false;
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.textContent = originalBtnText;
@@ -229,7 +416,6 @@ export class RSVPManager {
 
     const saved = JSON.parse(localStorage.getItem('wedding_blessings') || '[]');
     if (saved.length === 0) {
-      // Default seed warm blessing
       const defaultBlessings = [
         {
           name: "Rajput Family",
